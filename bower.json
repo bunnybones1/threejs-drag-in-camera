@@ -1,0 +1,17 @@
+{
+  "name": "threejs-interactive-transform",
+  "version": "0.0.0",
+  "authors": [
+    "Tomasz Dysinski <oz@bunnybones.com>"
+  ],
+  "license": "MIT",
+  "homepage": "http://bunnybones.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+  ],
+  "devDependencies": {
+    "three.js": "*"
+  }
+}

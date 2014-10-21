@@ -1,0 +1,38 @@
+{
+  "name": "threejs-interactive-transform",
+  "version": "1.0.0",
+  "description": "Helpers to transform threejs objects by user cursor interactions such as mouse or touch.",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Tomasz Dysinski",
+    "email": "oz@bunnybones.com",
+    "url": "https://github.com/bunnybones1"
+  },
+  "dependencies": {
+    "input-touch": "^1.0.0",
+    "input-unified-pointers": "^1.0.0",
+    "threejs-hittest": "^1.0.0"
+  },
+  "devDependencies": {
+    "input-touch": "^1.0.0",
+    "loadandrunscripts": "^1.0.0",
+    "threejs-managed-view": "^1.0.4"
+  },
+  "scripts": {
+    "test": "beefy test.js --live --open"
+  },
+  "keywords": [
+    "threejs",
+    "interact",
+    "transform"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bunnybones1/threejs-interactive-transform.git"
+  },
+  "homepage": "https://github.com/bunnybones1/threejs-interactive-transform",
+  "bugs": {
+    "url": "https://github.com/bunnybones1/threejs-interactive-transform/issues"
+  }
+}
