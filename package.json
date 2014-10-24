@@ -1,6 +1,6 @@
 {
   "name": "threejs-interactive-transform",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Helpers to transform threejs objects by user cursor interactions such as mouse or touch.",
   "main": "index.js",
   "license": "MIT",
