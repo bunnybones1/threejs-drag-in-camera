@@ -3,7 +3,7 @@ var onReady = function() {
 	var InteractiveTransform = require('./');
 	var Touch = require('input-touch');
 	var view = new View({
-
+		stats: true
 	})
 
 	var totalHandles = 4;
@@ -22,7 +22,6 @@ var onReady = function() {
 		if(object.material.colorBackup) {
 			object.material.color.copy(object.material.colorBackup);
 		}
-
 	}
 
 	for (var i = 0; i < totalHandles; i++) {
@@ -30,6 +29,7 @@ var onReady = function() {
 			new THREE.SphereGeometry(1, 32, 16)
 		)
 		interactiveTransform.addSelectable(handle, onSelect, onUnselect);
+		interactiveTransform.addDragable(handle);
 		handle.position.x = i / totalHandles * 10;
 		handle._touchstart = function(x, y) {
 			console.log(x, y);
@@ -38,13 +38,17 @@ var onReady = function() {
 		// interactiveTransform.drag(handle);
 	};
 	
-	var testCoords = {
-		x: window.innerWidth * .5, 
-		y: window.innerHeight * .5
-	}
-	Touch.testStart(testCoords.x, testCoords.y, 0);
-	Touch.testMove(testCoords.x + 200, testCoords.y + 100, 0);
-	Touch.testEnd(testCoords.x + 200, testCoords.y + 100, 0);
+	setTimeout(function() {
+
+		var testCoords = {
+			x: window.innerWidth * .5, 
+			y: window.innerHeight * .5
+		}
+
+		Touch.testStart(testCoords.x, testCoords.y, 0);
+		Touch.testMove(testCoords.x + 200, testCoords.y + 100, 0);
+		Touch.testEnd(testCoords.x + 200, testCoords.y + 100, 0);
+	}, 500)
 }
 
 var loadAndRunScripts = require('loadandrunscripts');
