@@ -1,6 +1,6 @@
 {
   "name": "threejs-drag-in-camera",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Helper to move threejs objects within a camera view. Especially useful with mouse and touch dragging.",
   "main": "index.js",
   "license": "MIT",
