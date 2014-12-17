@@ -11,7 +11,7 @@ var onReady = function() {
 	var geometry = new THREE.SphereGeometry(1, 32, 16)
 	for (var i = 0; i < totalHandles; i++) {
 		var handle = new THREE.Mesh( geometry)
-		dragInCamera.addDragable(handle);
+		dragInCamera.addObject(handle);
 		handle.position.x = i / totalHandles * 8;
 		view.scene.add(handle);
 	};

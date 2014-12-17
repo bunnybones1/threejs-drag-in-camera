@@ -50,7 +50,7 @@ InteractiveTransform.prototype = {
 		);
 	},
 
-	addDragable: function(obj) {
+	addObject: function(obj) {
 		this.dragableObjects.push(obj);
 	},
 
