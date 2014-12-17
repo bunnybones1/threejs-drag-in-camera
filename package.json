@@ -1,7 +1,7 @@
 {
-  "name": "threejs-interactive-transform",
+  "name": "threejs-drag-in-camera",
   "version": "1.1.0",
-  "description": "Helpers to transform threejs objects by user cursor interactions such as mouse or touch.",
+  "description": "Helper to move threejs objects within a camera view. Especially useful with mouse and touch dragging.",
   "main": "index.js",
   "license": "MIT",
   "author": {
@@ -10,14 +10,12 @@
     "url": "https://github.com/bunnybones1"
   },
   "dependencies": {
-    "input-touch": "^1.0.0",
-    "input-unified-pointers": "^1.0.0",
-    "threejs-hittest": "^1.0.0"
+    "threejs-hittest": "^1.1.0"
   },
   "devDependencies": {
-    "input-touch": "^1.0.0",
+    "input-unified-pointers": "^2.0.1",
     "loadandrunscripts": "^1.0.0",
-    "threejs-managed-view": "^1.0.4"
+    "threejs-managed-view": "^1.3.5"
   },
   "scripts": {
     "test": "beefy test.js --live --open"
@@ -29,10 +27,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/bunnybones1/threejs-interactive-transform.git"
+    "url": "git://github.com/bunnybones1/threejs-drag-in-camera.git"
   },
-  "homepage": "https://github.com/bunnybones1/threejs-interactive-transform",
+  "homepage": "https://github.com/bunnybones1/threejs-drag-in-camera",
   "bugs": {
-    "url": "https://github.com/bunnybones1/threejs-interactive-transform/issues"
+    "url": "https://github.com/bunnybones1/threejs-drag-in-camera/issues"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "threejs-interactive-transform",
+  "name": "threejs-drag-in-camera",
   "version": "0.0.0",
   "authors": [
     "Tomasz Dysinski <oz@bunnybones.com>"

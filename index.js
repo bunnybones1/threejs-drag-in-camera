@@ -1,13 +1,6 @@
 var Pointers = require('input-unified-pointers');
 var hitTest = require('threejs-hittest');
 
-var DOWN = 0,
-	UP = 1,
-	DRAG = 2,
-	MOVE = 3,
-	HOVER = 4,
-	SELECT = 5;
-
 var maxPointers = 21;
 var onlyDragTheTopOne = true;
 
@@ -17,8 +10,9 @@ var worldCameraPosition = new THREE.Vector3(),
 	projector = new THREE.Projector();
 
 
-function InteractiveTransform(canvasElement, camera){
+function InteractiveTransform(targetElement, camera){
 	this.camera = camera;
+	this.targetElement = targetElement;
 	this.selected = [];
 	this.draggedByPointer = [];
 	for (var i = 0; i < maxPointers; i++) {
@@ -30,11 +24,11 @@ function InteractiveTransform(canvasElement, camera){
 	this.onPointerDown = this.onPointerDown.bind(this);
 	this.onPointerUp = this.onPointerUp.bind(this);
 	this.onPointerDrag = this.onPointerDrag.bind(this);
-	this.onPointerSelect = this.onPointerSelect.bind(this);
-	Pointers.onPointerDownSignal.add(this.onPointerDown);
-	Pointers.onPointerUpSignal.add(this.onPointerUp);
-	Pointers.onPointerDragSignal.add(this.onPointerDrag);
-	Pointers.onPointerSelectSignal.add(this.onPointerSelect);
+	var pointers = this.pointers = new Pointers(targetElement);
+	pointers.onPointerDownSignal.add(this.onPointerDown);
+	pointers.onPointerUpSignal.add(this.onPointerUp);
+	pointers.onPointerDragSignal.add(this.onPointerDrag);
+	if(targetElement.offsetWidth == 0 || targetElement.offsetWidth === undefined) throw new Error('target element has no offsetWidth. Reconsider implementation.');
 }
 
 InteractiveTransform.prototype = {
@@ -49,17 +43,11 @@ InteractiveTransform.prototype = {
 
 	getIntersections: function (x, y, objects) {
 		return hitTest(
-			x / window.innerWidth * 2 - 1, 
-			y / window.innerHeight * 2 - 1, 
+			x / this.targetElement.offsetWidth * 2 - 1, 
+			y / this.targetElement.offsetHeight * 2 - 1, 
 			this.camera, 
 			objects
 		);
-	},
-
-	addSelectable: function(obj, selectCallback, unselectCallback) {
-		this.selectableObjects.push(obj);
-		obj.__pointer_onSelect = selectCallback;
-		obj.__pointer_onUnselect = unselectCallback;
 	},
 
 	addDragable: function(obj) {
@@ -89,19 +77,6 @@ InteractiveTransform.prototype = {
 			if(index !== -1) this.objectsBeingDragged.splice(index, 1);
 		};
 		draggedIntersections.splice(0, draggedIntersections.length);
-	},
-
-	onPointerSelect: function(x, y, id) {
-		var intersections = this.getIntersections(x, y, this.selectableObjects);
-		//select
-		for (var i = this.selected.length - 1; i >= 0; i--) {
-			this.selected[i].__pointer_onUnselect(this.selected[i]);
-			this.selected.splice(i, 1);
-		};
-		if(intersections.length > 0) {
-			this.selected.push(intersections[0].object);
-			intersections[0].object.__pointer_onSelect(intersections[0].object);
-		}
 	},
 
 	onPointerDrag: function(x, y, id) {
