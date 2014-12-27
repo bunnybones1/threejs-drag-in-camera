@@ -20,13 +20,28 @@ var onReady = function() {
 	setTimeout(function() {
 
 		var testCoords = {
-			x: window.innerWidth * .5,
+			x: window.innerWidth * .75,
 			y: window.innerHeight * .5
 		}
 
-		dragInCamera.pointers.touch.testStart(testCoords.x, testCoords.y, 0);
-		dragInCamera.pointers.touch.testMove(testCoords.x + 200, testCoords.y + 100, 0);
-		dragInCamera.pointers.touch.testEnd(testCoords.x + 200, testCoords.y + 100, 0);
+		view.camera.updateMatrix();
+		view.camera.updateMatrixWorld();
+		view.camera.updateProjectionMatrix();
+
+		
+
+		dragInCamera.pointers.mouse.testMove(testCoords.x, testCoords.y);
+		dragInCamera.pointers.mouse.testDown(testCoords.x, testCoords.y);
+		dragInCamera.pointers.mouse.testMove(testCoords.x + 100, testCoords.y + 100);
+		dragInCamera.pointers.mouse.testUp(testCoords.x + 100, testCoords.y + 100);
+		// dragInCamera.setPointerLock(true);
+		// dragInCamera.pointers.mouse.testMove(testCoords.x, testCoords.y);
+		// dragInCamera.pointers.mouse.testDown(testCoords.x, testCoords.y);
+		// view.camera.position.x += .1;
+		// // // view.camera.position.y -= .1;
+		// // // view.camera.position.z -= .1;
+		// dragInCamera.pointers.mouse.testMove(testCoords.x + 2, testCoords.y + 1);
+		// dragInCamera.pointers.mouse.testUp(testCoords.x + 2, testCoords.y + 1);
 	}, 500)
 }
 

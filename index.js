@@ -1,8 +1,6 @@
 var Pointers = require('input-unified-pointers');
 var hitTest = require('threejs-hittest');
 
-var maxPointers = 21;
-var onlyDragTheTopOne = true;
 
 var worldCameraPosition = new THREE.Vector3(),
 	offset = new THREE.Vector3(),
@@ -11,11 +9,15 @@ var worldCameraPosition = new THREE.Vector3(),
 
 
 function InteractiveTransform(targetElement, camera){
+
+	this.maxPointers = 21;
+	this.onlyDragTheTopOne = true;
+	this.pointerLock = false;
 	this.camera = camera;
 	this.targetElement = targetElement;
 	this.selected = [];
 	this.draggedByPointer = [];
-	for (var i = 0; i < maxPointers; i++) {
+	for (var i = 0; i < this.maxPointers; i++) {
 		this.draggedByPointer[i] = [];
 	};
 	this.dragableObjects = [];
@@ -55,6 +57,17 @@ InteractiveTransform.prototype = {
 	},
 
 	onPointerDown: function(x, y, id) {
+		this.dragableObjects.forEach(function(obj) {
+			obj.updateMatrix();
+			obj.updateMatrixWorld();
+		})
+		hitTest.testGrid(this.camera, this.dragableObjects);
+
+		if(this.pointerLock && id === this.pointers.mouseID) {
+			x = this.targetElement.offsetWidth * .5;
+			y = this.targetElement.offsetHeight * .5;
+
+		}
 		var intersections = this.getIntersections(x, y, this.dragableObjects);
 		//drag
 		for (var i = 0; i < intersections.length; i++) {
@@ -64,11 +77,15 @@ InteractiveTransform.prototype = {
 			this.objectsBeingDragged.push(object);
 			intersection.dragOffset = object.parent.worldToLocal( intersection.point ).sub(object.position);
 			this.draggedByPointer[id].push(intersection);
-			if(onlyDragTheTopOne) return;
+			if(this.onlyDragTheTopOne) return;
 		};
 	},
 
 	onPointerUp: function(x, y, id) {
+		if(this.pointerLock && id === this.pointers.mouseID) {
+			x = this.targetElement.offsetWidth * .5;
+			y = this.targetElement.offsetHeight * .5;
+		}
 		var draggedIntersections = this.draggedByPointer[id];
 		for (var i = draggedIntersections.length - 1; i >= 0; i--) {
 			var intersection = draggedIntersections[i];
@@ -80,15 +97,24 @@ InteractiveTransform.prototype = {
 	},
 
 	onPointerDrag: function(x, y, id) {
+		if(this.pointerLock && id === this.pointers.mouseID) {
+			x = this.targetElement.offsetWidth * .5;
+			y = this.targetElement.offsetHeight * .5;
+			// debugger;
+		}
 		var draggedIntersections = this.draggedByPointer[id];
 		for (var i = 0; i < draggedIntersections.length; i++) {
 			var intersection = draggedIntersections[i];
-			this.updateCameraVector(x/window.innerWidth * 2 - 1, y/window.innerHeight * 2 - 1);
+			this.updateCameraVector(x / this.targetElement.offsetWidth * 2 - 1, y / this.targetElement.offsetHeight * 2 - 1);
 			cameraVector.multiplyScalar(intersection.distance).add(worldCameraPosition);
 			var position = intersection.object.parent.worldToLocal(cameraVector);
 			intersection.object.position.copy(position).sub(intersection.dragOffset);
 		};
 	},
+
+	setPointerLock: function(value) {
+		this.pointerLock = value;
+	}
 
 };
 module.exports = InteractiveTransform;
