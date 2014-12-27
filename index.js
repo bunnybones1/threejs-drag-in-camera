@@ -3,7 +3,6 @@ var hitTest = require('threejs-hittest');
 
 
 var worldCameraPosition = new THREE.Vector3(),
-	offset = new THREE.Vector3(),
 	cameraVector = new THREE.Vector3(),
 	projector = new THREE.Projector();
 
@@ -15,14 +14,12 @@ function InteractiveTransform(targetElement, camera){
 	this.pointerLock = false;
 	this.camera = camera;
 	this.targetElement = targetElement;
-	this.selected = [];
 	this.draggedByPointer = [];
 	for (var i = 0; i < this.maxPointers; i++) {
 		this.draggedByPointer[i] = [];
-	};
+	}
 	this.dragableObjects = [];
 	this.objectsBeingDragged = [];
-	this.selectableObjects = [];
 	this.onPointerDown = this.onPointerDown.bind(this);
 	this.onPointerUp = this.onPointerUp.bind(this);
 	this.onPointerDrag = this.onPointerDrag.bind(this);
@@ -60,8 +57,9 @@ InteractiveTransform.prototype = {
 		this.dragableObjects.forEach(function(obj) {
 			obj.updateMatrix();
 			obj.updateMatrixWorld();
-		})
-		hitTest.testGrid(this.camera, this.dragableObjects);
+		});
+
+		hitTest.testGrid(x, y, this.camera, this.dragableObjects);
 
 		if(this.pointerLock && id === this.pointers.mouseID) {
 			x = this.targetElement.offsetWidth * .5;
@@ -78,7 +76,7 @@ InteractiveTransform.prototype = {
 			intersection.dragOffset = object.parent.worldToLocal( intersection.point ).sub(object.position);
 			this.draggedByPointer[id].push(intersection);
 			if(this.onlyDragTheTopOne) return;
-		};
+		}
 	},
 
 	onPointerUp: function(x, y, id) {
@@ -92,7 +90,7 @@ InteractiveTransform.prototype = {
 			var object = intersection.object;
 			var index = this.objectsBeingDragged.indexOf(object);
 			if(index !== -1) this.objectsBeingDragged.splice(index, 1);
-		};
+		}
 		draggedIntersections.splice(0, draggedIntersections.length);
 	},
 
@@ -109,7 +107,7 @@ InteractiveTransform.prototype = {
 			cameraVector.multiplyScalar(intersection.distance).add(worldCameraPosition);
 			var position = intersection.object.parent.worldToLocal(cameraVector);
 			intersection.object.position.copy(position).sub(intersection.dragOffset);
-		};
+		}
 	},
 
 	setPointerLock: function(value) {
