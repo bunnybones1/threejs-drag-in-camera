@@ -34,7 +34,8 @@ InteractiveTransform.prototype = {
 	updateCameraVector: function(x, y) {
 		//flip y, just cuz
 		cameraVector.set( x, -y, 0.5 );
-		projector.unprojectVector( cameraVector, this.camera );
+		this.camera.updateMatrixWorld();
+		cameraVector.unproject( this.camera );
 		worldCameraPosition.copy(this.camera.position);
 		this.camera.parent.localToWorld(worldCameraPosition);
 		cameraVector.sub( worldCameraPosition ).normalize();

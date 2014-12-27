@@ -1,5 +1,6 @@
 var onReady = function() {
 	var View = require('threejs-managed-view').View;
+	var FirstPersonController = require('threejs-camera-controller-first-person-desktop');
 	var DragInCamera = require('./');
 	var view = new View({
 		stats: true
@@ -16,6 +17,11 @@ var onReady = function() {
 		view.scene.add(handle);
 	}
 	
+	var fpsController = new FirstPersonController(view.camera, view.canvasContainer);
+
+	view.renderManager.onEnterFrame.add(function() {
+		fpsController.update();
+	})
 	//phantom touch test
 	setTimeout(function() {
 
@@ -24,24 +30,24 @@ var onReady = function() {
 			y: window.innerHeight * .5
 		};
 
-		view.camera.updateMatrix();
-		view.camera.updateMatrixWorld();
-		view.camera.updateProjectionMatrix();
+		// view.camera.updateMatrix();
+		// view.camera.updateMatrixWorld();
+		// view.camera.updateProjectionMatrix();
 
 		
 
 		dragInCamera.pointers.mouse.testMove(testCoords.x, testCoords.y);
 		dragInCamera.pointers.mouse.testDown(testCoords.x, testCoords.y);
-		dragInCamera.pointers.mouse.testMove(testCoords.x + 100, testCoords.y + 100);
-		dragInCamera.pointers.mouse.testUp(testCoords.x + 100, testCoords.y + 100);
-		dragInCamera.setPointerLock(true);
+		view.camera.position.x += 1;
 		dragInCamera.pointers.mouse.testMove(testCoords.x, testCoords.y);
-		dragInCamera.pointers.mouse.testDown(testCoords.x, testCoords.y);
-		view.camera.position.x += .1;
+		dragInCamera.pointers.mouse.testUp(testCoords.x, testCoords.y);
+		// dragInCamera.setPointerLock(true);
+		// dragInCamera.pointers.mouse.testMove(testCoords.x, testCoords.y);
+		// dragInCamera.pointers.mouse.testDown(testCoords.x, testCoords.y);
 		// // // view.camera.position.y -= .1;
 		// // // view.camera.position.z -= .1;
-		dragInCamera.pointers.mouse.testMove(testCoords.x + 2, testCoords.y + 1);
-		dragInCamera.pointers.mouse.testUp(testCoords.x + 2, testCoords.y + 1);
+		// dragInCamera.pointers.mouse.testMove(testCoords.x + 2, testCoords.y + 1);
+		// dragInCamera.pointers.mouse.testUp(testCoords.x + 2, testCoords.y + 1);
 	}, 500)
 };
 
