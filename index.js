@@ -55,18 +55,18 @@ InteractiveTransform.prototype = {
 	},
 
 	onPointerDown: function(x, y, id) {
+		if(this.pointerLock && id === this.pointers.mouseID) {
+			x = this.targetElement.offsetWidth * .5;
+			y = this.targetElement.offsetHeight * .5;
+		}
+
 		this.dragableObjects.forEach(function(obj) {
 			obj.updateMatrix();
 			obj.updateMatrixWorld();
 		});
 
-		hitTest.testGrid(x, y, this.camera, this.dragableObjects);
+		// hitTest.testGrid(x, y, this.camera, this.dragableObjects);
 
-		if(this.pointerLock && id === this.pointers.mouseID) {
-			x = this.targetElement.offsetWidth * .5;
-			y = this.targetElement.offsetHeight * .5;
-
-		}
 		var intersections = this.getIntersections(x, y, this.dragableObjects);
 		//drag
 		for (var i = 0; i < intersections.length; i++) {
@@ -99,7 +99,6 @@ InteractiveTransform.prototype = {
 		if(this.pointerLock && id === this.pointers.mouseID) {
 			x = this.targetElement.offsetWidth * .5;
 			y = this.targetElement.offsetHeight * .5;
-			// debugger;
 		}
 		var draggedIntersections = this.draggedByPointer[id];
 		for (var i = 0; i < draggedIntersections.length; i++) {
@@ -113,6 +112,25 @@ InteractiveTransform.prototype = {
 
 	setPointerLock: function(value) {
 		this.pointerLock = value;
+	},
+
+	update: function() {
+
+		for(var id = 0; id < this.maxPointers; id++) {
+			var draggedIntersections = this.draggedByPointer[id];
+			var lastPos = this.pointers.positionsById[id];
+			if(this.pointerLock && id === this.pointers.mouseID) {
+				lastPos.x = this.targetElement.offsetWidth * .5;
+				lastPos.y = this.targetElement.offsetHeight * .5;
+			}
+			for (var i = 0; i < draggedIntersections.length; i++) {
+				var intersection = draggedIntersections[i];
+				this.updateCameraVector(lastPos.x / this.targetElement.offsetWidth * 2 - 1, lastPos.y / this.targetElement.offsetHeight * 2 - 1);
+				cameraVector.multiplyScalar(intersection.distance).add(worldCameraPosition);
+				var position = intersection.object.parent.worldToLocal(cameraVector);
+				intersection.object.position.copy(position).sub(intersection.dragOffset);
+			}
+		}
 	}
 
 };
