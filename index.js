@@ -57,6 +57,13 @@ InteractiveTransform.prototype = {
 		this.dragableObjects.push(obj);
 	},
 
+	removeObject: function(obj) {
+		var index = this.dragableObjects.indexOf(obj);
+		if(index != -1) {
+			this.dragableObjects.splice(index, 1);
+		}
+	},
+
 	onPointerDown: function(x, y, id) {
 		if(this.pointerLock && id === this.pointers.mouseID) {
 			x = this.targetElement.offsetWidth * .5;
