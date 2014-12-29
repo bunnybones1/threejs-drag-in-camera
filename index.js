@@ -1,5 +1,6 @@
 var Pointers = require('input-unified-pointers');
 var hitTest = require('threejs-hittest');
+var signals = require('signals');
 
 
 var worldCameraPosition = new THREE.Vector3(),
@@ -28,6 +29,8 @@ function InteractiveTransform(targetElement, camera){
 	pointers.onPointerUpSignal.add(this.onPointerUp);
 	pointers.onPointerDragSignal.add(this.onPointerDrag);
 	if(targetElement.offsetWidth == 0 || targetElement.offsetWidth === undefined) throw new Error('target element has no offsetWidth. Reconsider implementation.');
+	this.onDragStartSignal = new signals.Signal();
+	this.onDragEndSignal = new signals.Signal();
 }
 
 InteractiveTransform.prototype = {
@@ -76,6 +79,7 @@ InteractiveTransform.prototype = {
 			this.objectsBeingDragged.push(object);
 			intersection.dragOffset = object.parent.worldToLocal( intersection.point ).sub(object.position);
 			this.draggedByPointer[id].push(intersection);
+			this.onDragStartSignal.dispatch(object);
 			if(this.onlyDragTheTopOne) return;
 		}
 	},
@@ -91,6 +95,7 @@ InteractiveTransform.prototype = {
 			var object = intersection.object;
 			var index = this.objectsBeingDragged.indexOf(object);
 			if(index !== -1) this.objectsBeingDragged.splice(index, 1);
+			this.onDragEndSignal.dispatch(object);
 		}
 		draggedIntersections.splice(0, draggedIntersections.length);
 	},
