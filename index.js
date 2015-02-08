@@ -4,8 +4,7 @@ var signals = require('signals');
 
 
 var worldCameraPosition = new THREE.Vector3(),
-	cameraVector = new THREE.Vector3(),
-	projector = new THREE.Projector();
+	cameraVector = new THREE.Vector3();
 
 
 function InteractiveTransform(targetElement, camera){
